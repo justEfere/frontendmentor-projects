@@ -1,0 +1,385 @@
+:root {
+    --bg-color: #1e202a;
+    --top-bg-pattern: #1f212e;
+    --card-bg: #252a41;
+    --text-sm: #aeb3cb;
+    --text-bg: #fff;
+    --toggle-bg: linear-gradient(90deg, #368fe7, #3eda82)
+}
+
+[theme=light] {
+    --bg-color: #fff;
+    --top-bg-pattern: #f5f7ff;
+    --card-bg: #f0f2fa;
+    --text-sm: #63687e;
+    --text-bg: #1e202a;
+    --toggle-bg: #aeb3cb
+}
+
+*,
+:after,
+:before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-bg) var(--bg-color)
+}
+
+html {
+    font-weight: 300;
+    font-size: 62.5%;
+    font-family: Inter, sans-serif
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    border: none;
+    outline: none;
+    color: inherit;
+    cursor: pointer
+}
+
+img,
+textarea {
+    width: 100%
+}
+
+textarea {
+    resize: none
+}
+
+input {
+    width: 100%
+}
+
+input,
+input:active,
+input:focus {
+    border: none;
+    outline: none
+}
+
+label {
+    text-transform: capitalize
+}
+
+body {
+    font-size: 1.4rem;
+    background-color: var(--bg-color);
+    color: var(--text-sm);
+    display: grid;
+    place-items: center
+}
+
+#app {
+    overflow-y: auto;
+    min-width: 30rem;
+    width: 100%;
+    max-width: 140rem;
+    margin: 4rem auto
+}
+
+.main {
+    padding: 1rem;
+    overflow: hidden;
+    width: 100%;
+    height: 100%
+}
+
+.main__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5rem
+}
+
+@media(max-width:600px) {
+    .main__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem
+    }
+}
+
+.main__header--header-title {
+    font-size: 3rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--text-bg)
+}
+
+.main__header--header-text {
+    text-transform: capitalize;
+    font-weight: 500
+}
+
+@media(max-width:600px) {
+    .main__header--header {
+        width: 100%;
+        border-bottom: .5px solid #aeb3cb;
+        padding-bottom: 2.5rem
+    }
+
+    .main__header--toggle {
+        width: 100%
+    }
+}
+
+.main__followers {
+    display: grid;
+    justify-content: stretch;
+    grid-template-columns: repeat(auto-fit, minmax(28rem, auto));
+    grid-template-rows: auto;
+    gap: 2rem;
+    width: 100%;
+    max-height: 60rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    cursor: pointer
+}
+
+.form__input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600
+}
+
+@media(max-width:600px) {
+    .form__input {
+        justify-content: space-between;
+        gap: unset
+    }
+}
+
+.form__input--input {
+    position: relative;
+    width: 4rem;
+    height: 2rem;
+    border-radius: 50px;
+    background: var(--toggle-bg)
+}
+
+.spanLabel {
+    position: absolute;
+    height: 80%;
+    width: 55%;
+    background-color: #fff;
+    border-radius: 20px;
+    left: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all .3s
+}
+
+#toggleTheme {
+    visibility: hidden;
+    opacity: 0
+}
+
+#toggleTheme:checked+label {
+    left: 35%;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
+.follower__card {
+    min-width: 30rem;
+    padding: 3rem 2rem;
+    background-color: var(--card-bg);
+    position: relative;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid var(--card-bg)
+}
+
+.follower__card:hover {
+    background-color: var(--top-bg-pattern)
+}
+
+.follower__card:before {
+    content: "";
+    position: absolute;
+    top: -.2rem;
+    left: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 100%;
+    height: 5px;
+    background-color: #fff
+}
+
+.follower__card.facebook:before {
+    background-color: #198ff5
+}
+
+.follower__card.twitter:before {
+    background-color: #1ca0f2
+}
+
+.follower__card.instagram:before {
+    background: linear-gradient(90deg, #fdc468, #ee867c, #df4996)
+}
+
+.follower__card.youtube:before {
+    background-color: #c4032a
+}
+
+.follower__card--social {
+    gap: 1rem;
+    margin-bottom: 2.5rem
+}
+
+.follower__card--social,
+.follower__card--social-media {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.follower__card--social-username {
+    font-weight: 600
+}
+
+.follower__card--stats {
+    margin-bottom: 2.5rem
+}
+
+.follower__card--stats-value {
+    font-size: 8rem;
+    font-weight: 600;
+    color: var(--text-bg);
+    margin-bottom: 1rem
+}
+
+.follower__card--stats-text {
+    letter-spacing: 5px;
+    color: var(--text-sm);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.8rem
+}
+
+.follower__card--footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem
+}
+
+.follower__card--footer.up {
+    color: #1db489
+}
+
+.follower__card--footer.down {
+    color: #dc414c
+}
+
+.follower__card--added {
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 1.6rem
+}
+
+.change {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 14px;
+    width: 14px
+}
+
+.main__overview {
+    margin-top: 5rem;
+    width: 100%;
+    padding: 1rem
+}
+
+.main__overview--header {
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--text-bg)
+}
+
+.main__overview--contents {
+    display: grid;
+    justify-content: stretch;
+    grid-template-columns: repeat(auto-fit, minmax(28rem, auto));
+    grid-template-rows: auto;
+    gap: 2rem;
+    width: 100%
+}
+
+.overview__card {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid var(--card-bg)
+}
+
+.overview__card:hover {
+    background-color: var(--top-bg-pattern)
+}
+
+.overview__card--top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-sm);
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    margin-bottom: 2rem
+}
+
+.overview__card--top-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px
+}
+
+.overview__card--bottom {
+    display: flex;
+    align-items: end;
+    justify-content: space-between
+}
+
+.overview__card--bottom-text {
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--text-bg)
+}
+
+.overview__card--bottom--change.up {
+    color: #1db489
+}
+
+.overview__card--bottom--change.down {
+    color: #dc414c
+}
+
+.overview__card--bottom--change {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    font-size: 1.2rem
+}
+
+.overview__card--change-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12px;
+    width: 12px
+}
