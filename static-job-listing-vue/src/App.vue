@@ -1,0 +1,464 @@
+<template>
+  <div class="main">
+    <MainHeader />
+
+    <BaseSearch :filterItems="filters" @clearFilter="clearFilter" @removeItem="removeItem" />
+
+    <div class="job__listings">
+      <JobListing v-for="jobs in modifiedData" :key="jobs.id" :job="jobs" @addFilter="updateFilter" />
+    </div>
+  </div>
+</template>
+
+<script>
+import MainHeader from './components/MainHeader.vue';
+import BaseSearch from './components/search/BaseSearch.vue';
+import JobListing from './components/JobListing/JobListing.vue';
+
+export default {
+  name: "App",
+  components: {
+    MainHeader,
+    BaseSearch,
+    JobListing
+  },
+
+  data() {
+    return {
+      jobData: Object,
+      modifiedData: [],
+      filters: [],
+    }
+  },
+
+  methods: {
+    updateFilter(value) {
+      if (this.filters.includes(value)) return;
+      this.filters = [...this.filters, value];
+
+      this.modifiedData = this.filterItems();
+    },
+
+    clearFilter() {
+      this.filters = [];
+      this.modifiedData = this.jobData
+    },
+
+    removeItem(item) {
+      this.filters = this.filters.filter(items => items != item)
+      this.modifiedData = this.filterItems();
+    },
+
+    filterItems() {
+
+      return this.jobData.filter(job => {
+        const jobValues = [job.role, job.level, ...job.languages, ...job.tools];
+
+        return this.filters.every(f => jobValues.includes(f))
+      })
+    }
+
+  },
+
+
+  beforeMount() {
+    const getdata = async () => {
+      const jobData = await fetch("data.json");
+      const datajson = await jobData.json()
+      this.jobData = datajson;
+      this.modifiedData = [...this.jobData]
+    }
+    getdata();
+  }
+}
+</script>
+
+<style lang="scss">
+// ### Primary
+
+$Green400: hsl(180, 29%, 50%);
+
+// ### Neutral
+// (Background)
+$Green50: hsl(180, 52%, 96%);
+$Gray400: hsl(180, 8%, 52%);
+$Green900: hsl(180, 14%, 20%);
+
+$white: #fff;
+
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  // scrollbar-color: red;
+}
+
+html {
+  font-weight: 500;
+  font-size: 62.5%;
+  font-family: "League Spartan", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  border: none;
+  outline: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+img {
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+}
+
+input {
+  border: none;
+  outline: none;
+  width: 100%;
+
+  &:focus,
+  &:active {
+    outline: none;
+    border: none;
+  }
+}
+
+label {
+  text-transform: capitalize;
+}
+
+body {
+  font-size: 1.5rem;
+  background-color: $Green50;
+  display: grid;
+  // overflow: hidden;
+  place-items: center;
+}
+
+#app {
+  display: grid;
+  place-items: center;
+  // overflow: hidden;
+  width: 100%;
+}
+
+.main {
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding-top: 17rem;
+
+  &__header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 20rem;
+    background-color: $Green400;
+    z-index: -1;
+
+    &-pic,
+    &-img {
+      height: 100%;
+    }
+  }
+
+  &__search {
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    // min-width: 30rem;
+    padding: 2rem 3.5rem;
+    border-radius: 5px;
+    color: $Gray400;
+
+    @media (max-width:800px) {
+      width: 90%;
+      padding: 2rem 2rem;
+    }
+
+    @media (max-width:400px) {
+      width: 95%;
+      padding: 2rem 1rem;
+    }
+
+
+    &--items {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 90%;
+      gap: 1.5rem;
+    }
+  }
+}
+
+.search {
+  &__item {
+    display: flex;
+    align-items: center;
+    background-color: $Green50;
+    color: $Green400;
+    text-transform: capitalize;
+
+    &-text {
+      padding: .5rem 1rem;
+    }
+
+    border-radius: 4px;
+  }
+}
+
+.cancel_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  background-color: $Green400;
+  color: $white;
+  border-radius: 0 4px 4px 0;
+
+  &:hover {
+    border: none;
+    outline: none;
+    background-color: $Green900;
+  }
+}
+
+.link_btn {
+  background: none;
+  color: $Green400;
+  text-decoration: underline;
+  text-decoration-color: inherit;
+  text-decoration-thickness: 1.2px;
+  text-transform: capitalize;
+}
+
+.job__listings {
+  margin: 5rem;
+  width: 80%;
+
+  @media (max-width:800px) {
+    width: 90%;
+  }
+
+  @media (max-width:400px) {
+    width: 95%;
+  }
+
+
+  &--item {
+    background-color: #fff;
+    width: 100%;
+    border-radius: 8px;
+    padding: 2.5rem 3.5rem;
+    position: relative;
+    box-shadow: 0 10px 10px hsla(180, 29%, 50%, 0.267);
+    margin-bottom: 2rem;
+
+    @media (max-width:800px) {
+      padding: 2.5rem 2rem;
+    }
+
+    @media (max-width:600px) {
+      padding-top: 4rem;
+      margin-bottom: 6rem;
+
+      &:first-child {
+        margin-top: 3rem;
+      }
+    }
+
+    @media (max-width:300px) {
+      padding: 1.5rem 2rem;
+      padding-top: 4rem;
+    }
+
+
+    &.featured {
+      border-left: 4px solid $Green400;
+    }
+  }
+
+  &--flexitems {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.5rem;
+
+    @media (max-width:600px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &--details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 2rem;
+
+    @media (max-width:600px) {
+      width: 100%;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid $Gray400;
+    }
+  }
+
+  &--brand {
+    height: 8rem;
+    width: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width:600px) {
+      position: absolute;
+      top: -15%;
+      height: 6rem;
+      width: 6rem;
+    }
+
+    &-img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &--content {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+
+    @media (max-width:600px) {
+      width: 100%;
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      gap: 1.5rem;
+
+      @media (max-width:380px) {
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+    }
+
+    &-heading {
+      text-transform: capitalize;
+      font-weight: 500;
+      font-size: 1.8rem;
+
+      &:hover {
+        color: $Green400;
+        cursor: pointer;
+      }
+    }
+
+    &-title {
+      color: $Green400;
+      text-transform: capitalize;
+      font-size: 1.6rem;
+      font-weight: 500;
+    }
+  }
+
+
+  &--breadcrumblist {
+    display: flex;
+    align-items: flex-start;
+    font-size: 1.2rem;
+    gap: 3rem;
+    color: $Gray400;
+    text-transform: capitalize;
+
+    @media (max-width:600px) {
+      gap: 1.5rem;
+    }
+
+    @media (max-width:300px) {
+      gap: 2rem;
+    }
+
+
+    &-item {
+      position: relative;
+
+      &:not(:first-child) {
+        &::before {
+          content: "";
+          position: absolute;
+          left: -1.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          height: .3rem;
+          width: .3rem;
+          border-radius: 100%;
+          background-color: $Gray400;
+
+          @media (max-width:600px) {
+            left: -.8rem;
+            top: 40%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+
+  &--item {
+    &-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: $white;
+  text-transform: uppercase;
+  background-color: $Green900;
+  font-size: 1rem;
+  font-weight: 700;
+
+  &.new {
+    background-color: $Green400;
+  }
+}
+
+.filter_btn {
+  background-color: $Green50;
+  color: $Green400;
+  text-transform: capitalize;
+  padding: .5rem 1rem;
+
+  &:hover {
+    background-color: $Green400;
+    color: $white;
+    border-radius: 4px;
+  }
+}
+</style>
